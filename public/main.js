@@ -98,16 +98,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_problem_list_problem_list_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/problem-list/problem-list.component */ "./src/app/components/problem-list/problem-list.component.ts");
 /* harmony import */ var _components_problem_detail_problem_detail_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/problem-detail/problem-detail.component */ "./src/app/components/problem-detail/problem-detail.component.ts");
 /* harmony import */ var _services_data_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./services/data.service */ "./src/app/services/data.service.ts");
-/* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! .//app.routing.module */ "./src/app/app.routing.module.ts");
-/* harmony import */ var _components_new_problem_new_problem_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/new-problem/new-problem.component */ "./src/app/components/new-problem/new-problem.component.ts");
-/* harmony import */ var _components_navbar_navbar_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/navbar/navbar.component */ "./src/app/components/navbar/navbar.component.ts");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _services_auth_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./services/auth.service */ "./src/app/services/auth.service.ts");
+/* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! .//app.routing.module */ "./src/app/app.routing.module.ts");
+/* harmony import */ var _components_new_problem_new_problem_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/new-problem/new-problem.component */ "./src/app/components/new-problem/new-problem.component.ts");
+/* harmony import */ var _components_navbar_navbar_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/navbar/navbar.component */ "./src/app/components/navbar/navbar.component.ts");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -128,18 +130,21 @@ var AppModule = /** @class */ (function () {
                 _app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"],
                 _components_problem_list_problem_list_component__WEBPACK_IMPORTED_MODULE_4__["ProblemListComponent"],
                 _components_problem_detail_problem_detail_component__WEBPACK_IMPORTED_MODULE_5__["ProblemDetailComponent"],
-                _components_new_problem_new_problem_component__WEBPACK_IMPORTED_MODULE_8__["NewProblemComponent"],
-                _components_navbar_navbar_component__WEBPACK_IMPORTED_MODULE_9__["NavbarComponent"]
+                _components_new_problem_new_problem_component__WEBPACK_IMPORTED_MODULE_9__["NewProblemComponent"],
+                _components_navbar_navbar_component__WEBPACK_IMPORTED_MODULE_10__["NavbarComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
-                _app_routing_module__WEBPACK_IMPORTED_MODULE_7__["AppRoutingModule"],
+                _app_routing_module__WEBPACK_IMPORTED_MODULE_8__["AppRoutingModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormsModule"],
-                _angular_common_http__WEBPACK_IMPORTED_MODULE_10__["HttpClientModule"]
+                _angular_common_http__WEBPACK_IMPORTED_MODULE_11__["HttpClientModule"]
             ],
             providers: [{
                     provide: "data",
                     useClass: _services_data_service__WEBPACK_IMPORTED_MODULE_6__["DataService"]
+                }, {
+                    provide: "auth",
+                    useClass: _services_auth_service__WEBPACK_IMPORTED_MODULE_7__["AuthService"]
                 }],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]]
         })
@@ -228,7 +233,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-expand-lg navbar-light bg-light\">\n  <a class=\"navbar-brand\" href=\"#\">{{title}}</a>\n  <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarSupportedContent\" aria-controls=\"navbarSupportedContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n\n  <div id=\"navbarNavDropdown\" class=\"navbar-collapse collapse\">\n    <form class=\"navbar-nav mr-auto\">\n      <input class=\"form-control mr-sm-2\" type=\"search\" placeholder=\"Search Problem\" aria-label=\"Search\">\n    </form>\n    <ul class=\"navbar-nav navbar-right\">\n      <li>\n        <form class=\"navbar-form\">\n          <button type=\"buttong\" class=\"btn btn-primary\">Sign in</button>\n        </form>\n      </li>\n      <li class=\"nav-item dropdown\">\n       <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"navbarDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n         {{username}}\n       </a>\n       <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdown\">\n         <a class=\"dropdown-item\" href=\"#\">My Profile</a>\n         <a class=\"dropdown-item\" href=\"#\">My Favorites</a>\n         <a class=\"dropdown-item\" href=\"#\">My Submissions</a>\n         <div class=\"dropdown-divider\"></div>\n         <a class=\"dropdown-item\" href=\"#\">Log out</a>\n       </div>\n      </li>\n    </ul>\n  </div>\n</nav>\n"
+module.exports = "<nav class=\"navbar navbar-expand-lg navbar-light bg-light\">\n  <a class=\"navbar-brand\" href=\"#\">{{title}}</a>\n  <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarSupportedContent\" aria-controls=\"navbarSupportedContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n\n  <div class=\"collapse navbar-collapse\" id=\"navbarSupportedContent\">\n    <form class=\"navbar-nav mr-auto\">\n      <input class=\"form-control mr-sm-2\" type=\"search\" placeholder=\"Search Problem\" aria-label=\"Search\">\n    </form>\n    <ul class=\"navbar-nav navbar-right\">\n      <li>\n        <form class=\"navbar-form\">\n          <button type=\"buttong\" class=\"btn btn-primary\" (click)=\"login()\">Sign in</button>\n        </form>\n      </li>\n      <li class=\"nav-item dropdown\">\n       <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"navbarDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n         {{username}}\n       </a>\n       <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdown\">\n         <a class=\"dropdown-item\" href=\"#\">My Profile</a>\n         <a class=\"dropdown-item\" href=\"#\">My Favorites</a>\n         <a class=\"dropdown-item\" href=\"#\">My Submissions</a>\n         <div class=\"dropdown-divider\"></div>\n         <a class=\"dropdown-item\" href=\"#\" (click)=\"logout()\">Log out</a>\n       </div>\n      </li>\n    </ul>\n  </div>\n</nav>\n"
 
 /***/ }),
 
@@ -252,13 +257,23 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (undefined && undefined.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 
 var NavbarComponent = /** @class */ (function () {
-    function NavbarComponent() {
+    function NavbarComponent(auth) {
+        this.auth = auth;
         this.title = "COJ";
-        this.username = "Xianwen";
+        this.username = "";
     }
     NavbarComponent.prototype.ngOnInit = function () {
+    };
+    NavbarComponent.prototype.login = function () {
+        this.auth.login();
+    };
+    NavbarComponent.prototype.logout = function () {
+        this.auth.logout();
     };
     NavbarComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -266,7 +281,8 @@ var NavbarComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./navbar.component.html */ "./src/app/components/navbar/navbar.component.html"),
             styles: [__webpack_require__(/*! ./navbar.component.css */ "./src/app/components/navbar/navbar.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __param(0, Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Inject"])('auth')),
+        __metadata("design:paramtypes", [Object])
     ], NavbarComponent);
     return NavbarComponent;
 }());
@@ -337,7 +353,7 @@ var NewProblemComponent = /** @class */ (function () {
     };
     NewProblemComponent.prototype.addProblem = function () {
         this.data.addProblem(this.newProblem)
-            .catch(function (error) { return alert(error.body); });
+            .catch(function (error) { return console.log(error.body); });
         this.newProblem = Object.assign({}, DEFAULT_PROBLEM);
     };
     NewProblemComponent = __decorate([
@@ -500,6 +516,60 @@ var ProblemListComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [Object])
     ], ProblemListComponent);
     return ProblemListComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/services/auth.service.ts":
+/*!******************************************!*\
+  !*** ./src/app/services/auth.service.ts ***!
+  \******************************************/
+/*! exports provided: AuthService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthService", function() { return AuthService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var auth0_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! auth0-js */ "./node_modules/auth0-js/src/index.js");
+/* harmony import */ var auth0_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(auth0_js__WEBPACK_IMPORTED_MODULE_2__);
+// src/app/auth/auth.service.ts
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+window.global = window;
+var AuthService = /** @class */ (function () {
+    function AuthService(router) {
+        this.router = router;
+        this.auth0 = new auth0_js__WEBPACK_IMPORTED_MODULE_2__["WebAuth"]({
+            clientID: '20G9VTTb0sO74fNSKKXjecoJk5IeENgJ',
+            domain: 'co-oj.auth0.com',
+            responseType: 'token id_token',
+            audience: 'https://co-oj.auth0.com/userinfo',
+            redirectUri: 'http://localhost:3000/callback',
+            scope: 'openid'
+        });
+    }
+    AuthService.prototype.login = function () {
+        this.auth0.authorize();
+    };
+    AuthService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
+        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"]])
+    ], AuthService);
+    return AuthService;
 }());
 
 
