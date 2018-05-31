@@ -13,13 +13,15 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class AuthService {
 
+  domain = 'co-oj.auth0.com';
+
   auth0 = new auth0.WebAuth({
     clientID: 'kTbB0h3z4Uu5LAvCUJY7IbC6oR6f0fL2',
     domain: 'co-oj.auth0.com',
     responseType: 'token id_token',
     audience: 'https://co-oj.auth0.com/userinfo',
     redirectUri: 'http://localhost:3000/callback',
-    scope: 'openid profile email'
+    scope: 'openid profile email roles'
   });
 
 
