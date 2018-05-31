@@ -1,9 +1,12 @@
-// src/app/auth/auth.service.ts
-
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import * as auth0 from 'auth0-js';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { Observable } from 'rxjs/internal/Observable';
+import { Http, Response, Headers } from '@angular/http';
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import 'rxjs/add/operator/toPromise';
 
 (window as any).global = window;
 
@@ -11,18 +14,92 @@ import * as auth0 from 'auth0-js';
 export class AuthService {
 
   auth0 = new auth0.WebAuth({
-    clientID: '20G9VTTb0sO74fNSKKXjecoJk5IeENgJ',
+    clientID: 'kTbB0h3z4Uu5LAvCUJY7IbC6oR6f0fL2',
     domain: 'co-oj.auth0.com',
     responseType: 'token id_token',
     audience: 'https://co-oj.auth0.com/userinfo',
     redirectUri: 'http://localhost:3000/callback',
-    scope: 'openid'
+    scope: 'openid profile email'
   });
 
-  constructor(public router: Router) {}
 
-  public login(): void {
+  constructor(public router: Router,
+              private http: HttpClient) { }
+
+  public login() {
     this.auth0.authorize();
+    // this.handleAuthentication();
   }
+
+  public handleAuthentication() {
+    this.auth0.parseHash((error, authResult) => {
+      if (authResult && authResult.accessToken && authResult.idToken) {
+        this.auth0.client.userInfo(authResult.accessToken, function(err, user) {
+          localStorage.setItem('profile', JSON.stringify(user));
+        });
+        window.location.hash = '';
+        this.setSession(authResult);
+      } else if (error) {
+        this.router.navigate(['/home']);
+        console.log(error);
+      }
+    });
+  }
+
+  private setSession(authResult): void {
+    // Set the time that the Access Token will expire at
+    const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
+    localStorage.setItem('access_token', authResult.accessToken);
+    localStorage.setItem('id_token', authResult.idToken);
+    localStorage.setItem('expires_at', expiresAt);
+  }
+
+  public logout(): void {
+    // Remove tokens and expiry time from localStorage
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('expires_at');
+    localStorage.removeItem('profile');
+    // Go back to the home route
+    this.router.navigate(['/']);
+  }
+
+  public isAuthenticated(): boolean {
+    // Check whether the current time is past the
+    // Access Token's expiry time
+    const expiresAt = JSON.parse(localStorage.getItem('expires_at') || '{}');
+    return new Date().getTime() < expiresAt;
+  }
+
+  public getProfile() {
+    return JSON.parse(localStorage.getItem('profile'));
+  }
+
+  public resetPassword() : void {
+    let profile = this.getProfile();
+    let url : string = 'https://co-oj.auth0.com/dbconnections/change_password';
+    let httpOptions = {
+       headers: new HttpHeaders({
+       'Content-Type':  'application/json',
+      })
+    };
+    let body = {
+      client_id: 'kTbB0h3z4Uu5LAvCUJY7IbC6oR6f0fL2',
+      email: profile.email,
+      connection: 'Username-Password-Authentication'
+    }
+    this.http.post(url, body, httpOptions)
+    .toPromise()
+    .then((res: Response) => {
+      console.log(res.json);
+    })
+    .catch(this.handleError);
+  }
+
+  private handleError(error: any) : Promise<any> {
+    console.error('Error occurred', error);
+    return Promise.reject(error.message || error);
+  }
+
 
 }
