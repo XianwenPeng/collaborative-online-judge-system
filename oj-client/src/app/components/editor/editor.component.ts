@@ -58,6 +58,7 @@ export class EditorComponent implements OnInit {
     this.editor.$blockScrolling = Infinity;
 
     document.getElementsByTagName('textarea')[0].focus();
+
     this.collaboration.init(this.editor, this.sessionId);
     this.editor.lastAppliedChange = null;
 
@@ -67,6 +68,14 @@ export class EditorComponent implements OnInit {
         this.collaboration.change(JSON.stringify(e));
       }
     });
+
+    this.editor.session.getSelection().on("changeCursor", () => {
+      let cursor = this.editor.session.getSelection().getCursor();
+      console.log('curso moves: ' + JSON.stringify(cursor));
+      this.collaboration.cursorMove(JSON.stringify(cursor));
+    });
+
+    this.collaboration.restoreBuffer();
   }
 
   setLanguage(language: string) : void {

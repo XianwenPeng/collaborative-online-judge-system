@@ -32,7 +32,7 @@ function onError(error) {
 
 function onListening() {
   var addr = server.address();
-  var bind = typeof addr == 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+  var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   console.log('listening on ' + bind);
 
 }
