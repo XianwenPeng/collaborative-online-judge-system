@@ -23,6 +23,8 @@ export class EditorComponent implements OnInit {
     'Python': 'python'
   }
 
+  output: string;
+
   defaultContent = {
     'Java': `public class Example {
     public static void main(String[] args) {
@@ -41,7 +43,8 @@ export class EditorComponent implements OnInit {
   }
 
   constructor(@Inject("collaboration") private collaboration,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              @Inject('data') private data) { }
 
   ngOnInit() {
     this.route.params
@@ -86,11 +89,17 @@ export class EditorComponent implements OnInit {
   resetEditor(): void {
     this.editor.session.setMode("ace/mode/" + this.languageMap[this.language]);
     this.editor.setValue(this.defaultContent[this.language]);
+    this.output = '';
   }
 
   submit(): void {
     let userCode = this.editor.getValue();
-    console.log(userCode);
+    let data = {
+      user_code: userCode,
+      lang: this.language.toLowerCase()
+    };
+    this.data.buildAndRun(data)
+              .then(res => this.output = res.text);
   }
 
 }

@@ -55,9 +55,20 @@ export class DataService {
     .catch(this.handleError);
   }
 
-  GetHttpHeaders() : HttpHeaders {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return headers;
+  buildAndRun(data): Promise<Object> {
+    console.log(data);
+    const httpOptions = {
+       headers: new HttpHeaders({
+       'Content-Type':  'application/json',
+      })
+    };
+    return this.http.post(`/api/v1/build_and_run`, data, httpOptions)
+    .toPromise()
+    .then((res: Response) => {
+      console.log(res);
+      return res;
+    })
+    .catch(this.handleError);
   }
 
   private handleError(error: any): Promise<any> {

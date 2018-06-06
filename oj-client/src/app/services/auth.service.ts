@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import * as auth0 from 'auth0-js';
@@ -24,13 +24,20 @@ export class AuthService {
     scope: 'openid profile email roles'
   });
 
+  private usernameSubject = new BehaviorSubject<string>('');
+
+  stream: Observable<string>;
+
+  nameSubject: Subject<string>;
 
   constructor(public router: Router,
               private http: HttpClient) { }
 
+  ngOnInit() {
+  }
+
   public login() {
     this.auth0.authorize();
-    // this.handleAuthentication();
   }
 
   public handleAuthentication() {
@@ -103,5 +110,13 @@ export class AuthService {
     return Promise.reject(error.message || error);
   }
 
+  private changeUserName(term) {
+    console.log(term);
+    this.usernameSubject.next(term);
+  }
+
+  public getUserName(): Observable<string> {
+    return this.stream;
+  }
 
 }
