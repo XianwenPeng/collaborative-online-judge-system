@@ -21,6 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ProfileComponent } from './components/profile/profile.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { SearchPipe } from './pipes/search.pipe';
+import { SessionDetailComponent } from './components/session-detail/session-detail.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { SearchPipe } from './pipes/search.pipe';
     NavbarComponent,
     ProfileComponent,
     EditorComponent,
-    SearchPipe
+    SearchPipe,
+    SessionDetailComponent
   ],
   imports: [
     BrowserModule,

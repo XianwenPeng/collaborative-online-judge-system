@@ -3,6 +3,8 @@ import { RouterModule, Routes} from "@angular/router";
 import { ProblemListComponent } from "./components/problem-list/problem-list.component";
 import { ProblemDetailComponent } from "./components/problem-detail/problem-detail.component";
 import { ProfileComponent } from './components/profile/profile.component';
+import { SessionDetailComponent } from './components/session-detail/session-detail.component';
+
 import { AuthGuardService } from './services/auth-guard.service';
 
 const routes: Routes = [
@@ -14,6 +16,10 @@ const routes: Routes = [
   {
     path: 'problems',
     component: ProblemListComponent
+  },
+  {
+    path: 'board/:sessionId',
+    component: SessionDetailComponent
   },
   {
     path: 'problems/:id',

@@ -14,6 +14,8 @@ export class NavbarComponent implements OnInit {
 
   title = "COJ";
 
+  sessionId = "";
+
   username: Observable<string>;
 
   searchBox: FormControl = new FormControl();
@@ -42,8 +44,6 @@ export class NavbarComponent implements OnInit {
                             .subscribe(
                                 term => this.input.changeInput(term)
                               );
-
-    console.log( Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6));
   }
 
   ngOnDestroy(){
@@ -59,6 +59,12 @@ export class NavbarComponent implements OnInit {
                             .subscribe(
                               name => console.log(name)
                             );
+  }
+
+  generateSessionId() {
+    this.sessionId = Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6);
+    window.open(`/board/${this.sessionId}`);
+    // this.router.navigate([`/board/${this.sessionId}`]);
   }
 
   getSubject(): Subject<string> {

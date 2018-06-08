@@ -38,14 +38,12 @@ export class DataService {
     .catch(this.handleError);
   }
 
-
   addProblem(problem: Problem): Promise<Problem> {
     const httpOptions = {
        headers: new HttpHeaders({
        'Content-Type':  'application/json',
       })
     };
-    // const headers = new HttpHeaders().set("Content-Type", "application/json");
     return this.http.post(`/api/v1/problems`, problem, httpOptions)
     .toPromise()
     .then((res: Response) => {
@@ -55,8 +53,15 @@ export class DataService {
     .catch(this.handleError);
   }
 
+  addAnswer(answer): void{
+    
+  }
+
+  restoreSubmittedAnswer(): void {
+
+  }
+
   buildAndRun(data): Promise<Object> {
-    console.log(data);
     const httpOptions = {
        headers: new HttpHeaders({
        'Content-Type':  'application/json',

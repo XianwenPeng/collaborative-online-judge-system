@@ -13,7 +13,8 @@ declare var ace : any;
 export class EditorComponent implements OnInit {
 
   editor: any;
-  sessionId: string;
+  problemId: string = '';
+  sessionId: string = '';
 
   public languages : string[] = ["Java", "C++", "Python"];
   language: string = "Java";
@@ -44,14 +45,32 @@ export class EditorComponent implements OnInit {
 
   constructor(@Inject("collaboration") private collaboration,
               private route: ActivatedRoute,
-              @Inject('data') private data) { }
+              @Inject('data') private data,
+              @Inject('auth') private auth) { }
 
   ngOnInit() {
     this.route.params
     .subscribe(params => {
-      this.sessionId = params['id'];
-      this.initEditor();
+      this.problemId = params['id'];
+      this.sessionId = params['sessionId'];
+      if (this.sessionId != undefined) {
+        this.initEditor();
+      } else {
+        this.initProblemEditor();
+      }
     });
+  }
+
+  initProblemEditor(): void {
+    this.editor = ace.edit("editor");
+    this.editor.setTheme("ace/theme/eclipse");
+    this.resetEditor();
+    this.editor.$blockScrolling = Infinity;
+
+    document.getElementsByTagName('textarea')[0].focus();
+    this.editor.lastAppliedChange = null;
+
+    this.data.restoreSubmittedAnswer();
   }
 
   initEditor(): void {
@@ -100,6 +119,14 @@ export class EditorComponent implements OnInit {
     };
     this.data.buildAndRun(data)
               .then(res => this.output = res.text);
+    if (this.auth.isAuthenticated() && this.problemId !== null) {
+      let answer = {
+        data: data,
+        id: this.problemId,
+        email: this.auth.getProfile().email
+      }
+      this.data.addAnswer(answer);
+    }
   }
 
 }

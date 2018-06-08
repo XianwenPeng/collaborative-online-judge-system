@@ -120,12 +120,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_profile_profile_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/profile/profile.component */ "./src/app/components/profile/profile.component.ts");
 /* harmony import */ var _components_editor_editor_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/editor/editor.component */ "./src/app/components/editor/editor.component.ts");
 /* harmony import */ var _pipes_search_pipe__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./pipes/search.pipe */ "./src/app/pipes/search.pipe.ts");
+/* harmony import */ var _components_session_detail_session_detail_component__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/session-detail/session-detail.component */ "./src/app/components/session-detail/session-detail.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -158,7 +160,8 @@ var AppModule = /** @class */ (function () {
                 _components_navbar_navbar_component__WEBPACK_IMPORTED_MODULE_13__["NavbarComponent"],
                 _components_profile_profile_component__WEBPACK_IMPORTED_MODULE_15__["ProfileComponent"],
                 _components_editor_editor_component__WEBPACK_IMPORTED_MODULE_16__["EditorComponent"],
-                _pipes_search_pipe__WEBPACK_IMPORTED_MODULE_17__["SearchPipe"]
+                _pipes_search_pipe__WEBPACK_IMPORTED_MODULE_17__["SearchPipe"],
+                _components_session_detail_session_detail_component__WEBPACK_IMPORTED_MODULE_18__["SessionDetailComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
@@ -208,13 +211,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_problem_list_problem_list_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/problem-list/problem-list.component */ "./src/app/components/problem-list/problem-list.component.ts");
 /* harmony import */ var _components_problem_detail_problem_detail_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/problem-detail/problem-detail.component */ "./src/app/components/problem-detail/problem-detail.component.ts");
 /* harmony import */ var _components_profile_profile_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/profile/profile.component */ "./src/app/components/profile/profile.component.ts");
-/* harmony import */ var _services_auth_guard_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./services/auth-guard.service */ "./src/app/services/auth-guard.service.ts");
+/* harmony import */ var _components_session_detail_session_detail_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/session-detail/session-detail.component */ "./src/app/components/session-detail/session-detail.component.ts");
+/* harmony import */ var _services_auth_guard_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./services/auth-guard.service */ "./src/app/services/auth-guard.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -232,13 +237,17 @@ var routes = [
         component: _components_problem_list_problem_list_component__WEBPACK_IMPORTED_MODULE_2__["ProblemListComponent"]
     },
     {
+        path: 'board/:sessionId',
+        component: _components_session_detail_session_detail_component__WEBPACK_IMPORTED_MODULE_5__["SessionDetailComponent"]
+    },
+    {
         path: 'problems/:id',
         component: _components_problem_detail_problem_detail_component__WEBPACK_IMPORTED_MODULE_3__["ProblemDetailComponent"]
     },
     {
         path: 'profile',
         component: _components_profile_profile_component__WEBPACK_IMPORTED_MODULE_4__["ProfileComponent"],
-        canActivate: [_services_auth_guard_service__WEBPACK_IMPORTED_MODULE_5__["AuthGuardService"]]
+        canActivate: [_services_auth_guard_service__WEBPACK_IMPORTED_MODULE_6__["AuthGuardService"]]
     },
     {
         path: '**',
@@ -311,10 +320,13 @@ var __param = (undefined && undefined.__param) || function (paramIndex, decorato
 
 
 var EditorComponent = /** @class */ (function () {
-    function EditorComponent(collaboration, route, data) {
+    function EditorComponent(collaboration, route, data, auth) {
         this.collaboration = collaboration;
         this.route = route;
         this.data = data;
+        this.auth = auth;
+        this.problemId = '';
+        this.sessionId = '';
         this.languages = ["Java", "C++", "Python"];
         this.language = "Java";
         this.languageMap = {
@@ -332,9 +344,24 @@ var EditorComponent = /** @class */ (function () {
         var _this = this;
         this.route.params
             .subscribe(function (params) {
-            _this.sessionId = params['id'];
-            _this.initEditor();
+            _this.problemId = params['id'];
+            _this.sessionId = params['sessionId'];
+            if (_this.sessionId != undefined) {
+                _this.initEditor();
+            }
+            else {
+                _this.initProblemEditor();
+            }
         });
+    };
+    EditorComponent.prototype.initProblemEditor = function () {
+        this.editor = ace.edit("editor");
+        this.editor.setTheme("ace/theme/eclipse");
+        this.resetEditor();
+        this.editor.$blockScrolling = Infinity;
+        document.getElementsByTagName('textarea')[0].focus();
+        this.editor.lastAppliedChange = null;
+        this.data.restoreSubmittedAnswer();
     };
     EditorComponent.prototype.initEditor = function () {
         var _this = this;
@@ -376,6 +403,14 @@ var EditorComponent = /** @class */ (function () {
         };
         this.data.buildAndRun(data)
             .then(function (res) { return _this.output = res.text; });
+        if (this.auth.isAuthenticated() && this.problemId !== null) {
+            var answer = {
+                data: data,
+                id: this.problemId,
+                email: this.auth.getProfile().email
+            };
+            this.data.addAnswer(answer);
+        }
     };
     EditorComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -385,7 +420,8 @@ var EditorComponent = /** @class */ (function () {
         }),
         __param(0, Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Inject"])("collaboration")),
         __param(2, Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Inject"])('data')),
-        __metadata("design:paramtypes", [Object, _angular_router__WEBPACK_IMPORTED_MODULE_1__["ActivatedRoute"], Object])
+        __param(3, Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Inject"])('auth')),
+        __metadata("design:paramtypes", [Object, _angular_router__WEBPACK_IMPORTED_MODULE_1__["ActivatedRoute"], Object, Object])
     ], EditorComponent);
     return EditorComponent;
 }());
@@ -412,7 +448,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <nav class=\"navbar navbar-default\">\n  <div class=\"container-fluid\">\n    <!-- Brand and toggle get grouped for better mobile display -->\n    <div class=\"navbar-header\">\n      <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\" aria-expanded=\"false\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n      </button>\n      <a class=\"navbar-brand\" href=\"#\">{{title}}</a>\n    </div>\n\n    <!-- Collect the nav links, forms, and other content for toggling -->\n    <div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">\n      <form class=\"navbar-form navbar-left\" (ngSubmit)=\"searchProblem()\">\n        <div class=\"form-group\">\n          <input type=\"text\" class=\"form-control\" placeholder=\"Search for problems\" [formControl]=\"searchBox\">\n        </div>\n      </form>\n      <ul class=\"nav navbar-nav navbar-right\">\n        <li >\n          <form class=\"navbar-form\">\n            <button type=\"button\" class=\"btn btn-primary\" *ngIf=\"!auth.isAuthenticated()\"\n              (click)=\"login()\"\n            >Sign in</button>\n          </form>\n        </li>\n        <li class=\"dropdown\" *ngIf=\"auth.isAuthenticated()\">\n          <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">{{username}} <span class=\"caret\"></span></a>\n          <ul class=\"dropdown-menu\">\n            <li><a routerLink=\"/profile\">My profile</a></li>\n            <li><a href=\"#\">My favorites</a></li>\n            <li><a href=\"#\">Something else here</a></li>\n            <li role=\"separator\" class=\"divider\"></li>\n            <li><a (click)=\"logout()\">Logout</a></li>\n          </ul>\n        </li>\n      </ul>\n    </div><!-- /.navbar-collapse -->\n  </div><!-- /.container-fluid -->\n</nav>\n</div>\n"
+module.exports = "<div class=\"container\">\n  <nav class=\"navbar navbar-default\">\n  <div class=\"container-fluid\">\n    <!-- Brand and toggle get grouped for better mobile display -->\n    <div class=\"navbar-header\">\n      <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\" aria-expanded=\"false\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n      </button>\n      <a class=\"navbar-brand\" href=\"#\">{{title}}</a>\n    </div>\n\n    <!-- Collect the nav links, forms, and other content for toggling -->\n    <div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">\n      <ul class=\"nav navbar-nav\">\n        <li><a href=\"/\">Problems</a></li>\n        <li><a routerLink=\"/board/{{sessionId}}\" (click)=\"generateSessionId()\">Board</a></li>\n        <form class=\"navbar-form navbar-left\" (ngSubmit)=\"searchProblem()\">\n          <div class=\"form-group\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Search for problems\" [formControl]=\"searchBox\">\n          </div>\n        </form>\n        <ul class=\"nav navbar-nav navbar-right\">\n          <li >\n            <form class=\"navbar-form\">\n              <button type=\"button\" class=\"btn btn-primary\" *ngIf=\"!auth.isAuthenticated()\"\n                (click)=\"login()\"\n              >Sign in</button>\n            </form>\n          </li>\n          <li class=\"dropdown\" *ngIf=\"auth.isAuthenticated()\">\n            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">{{username}} <span class=\"caret\"></span></a>\n            <ul class=\"dropdown-menu\">\n              <li><a routerLink=\"/profile\">My profile</a></li>\n              <li><a href=\"#\">My favorites</a></li>\n              <li><a href=\"#\">Something else here</a></li>\n              <li role=\"separator\" class=\"divider\"></li>\n              <li><a (click)=\"logout()\">Logout</a></li>\n            </ul>\n          </li>\n        </ul>\n      </ul>\n    </div><!-- /.navbar-collapse -->\n  </div><!-- /.container-fluid -->\n</nav>\n</div>\n"
 
 /***/ }),
 
@@ -457,6 +493,7 @@ var NavbarComponent = /** @class */ (function () {
         this.input = input;
         this.router = router;
         this.title = "COJ";
+        this.sessionId = "";
         this.searchBox = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"]();
         this.subject = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
     }
@@ -469,7 +506,6 @@ var NavbarComponent = /** @class */ (function () {
             .valueChanges
             .debounceTime(200)
             .subscribe(function (term) { return _this.input.changeInput(term); });
-        console.log(Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6));
     };
     NavbarComponent.prototype.ngOnDestroy = function () {
         this.subscription.unsubscribe();
@@ -480,6 +516,11 @@ var NavbarComponent = /** @class */ (function () {
     NavbarComponent.prototype.getUserName = function () {
         this.subscriptionName = this.auth.getUserName()
             .subscribe(function (name) { return console.log(name); });
+    };
+    NavbarComponent.prototype.generateSessionId = function () {
+        this.sessionId = Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6);
+        window.open("/board/" + this.sessionId);
+        // this.router.navigate([`/board/${this.sessionId}`]);
     };
     NavbarComponent.prototype.getSubject = function () {
         return this.subject;
@@ -826,6 +867,69 @@ var ProfileComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/components/session-detail/session-detail.component.css":
+/*!************************************************************************!*\
+  !*** ./src/app/components/session-detail/session-detail.component.css ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/components/session-detail/session-detail.component.html":
+/*!*************************************************************************!*\
+  !*** ./src/app/components/session-detail/session-detail.component.html ***!
+  \*************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"container\">\n  <div class=\"col-sm-16 col-md-12\">\n      <app-editor></app-editor>\n  </div>\n  <!-- <div class=\"col-xs-12 col-md-4\">\n    <div>\n      <p>\n        Code Board\n      </p>\n      <br/>\n    </div>\n  </div> -->\n</div>\n"
+
+/***/ }),
+
+/***/ "./src/app/components/session-detail/session-detail.component.ts":
+/*!***********************************************************************!*\
+  !*** ./src/app/components/session-detail/session-detail.component.ts ***!
+  \***********************************************************************/
+/*! exports provided: SessionDetailComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SessionDetailComponent", function() { return SessionDetailComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var SessionDetailComponent = /** @class */ (function () {
+    function SessionDetailComponent() {
+    }
+    SessionDetailComponent.prototype.ngOnInit = function () {
+    };
+    SessionDetailComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-session-detail',
+            template: __webpack_require__(/*! ./session-detail.component.html */ "./src/app/components/session-detail/session-detail.component.html"),
+            styles: [__webpack_require__(/*! ./session-detail.component.css */ "./src/app/components/session-detail/session-detail.component.css")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], SessionDetailComponent);
+    return SessionDetailComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/pipes/search.pipe.ts":
 /*!**************************************!*\
   !*** ./src/app/pipes/search.pipe.ts ***!
@@ -1111,7 +1215,7 @@ var CollaborationService = /** @class */ (function () {
             var x = cursor['row'];
             var y = cursor['column'];
             var changeClientId = cursor['socketId'];
-            console.log(x + ' ' + y + " " + changeClientId);
+            console.log(sessionId + ' ' + x + ' ' + y + " " + changeClientId);
             if (changeClientId in _this.clientsInfo) {
                 session.removeMarker(_this.clientsInfo[changeClientId]['marker']);
             }
@@ -1212,7 +1316,6 @@ var DataService = /** @class */ (function () {
                 'Content-Type': 'application/json',
             })
         };
-        // const headers = new HttpHeaders().set("Content-Type", "application/json");
         return this.http.post("/api/v1/problems", problem, httpOptions)
             .toPromise()
             .then(function (res) {
@@ -1221,8 +1324,11 @@ var DataService = /** @class */ (function () {
         })
             .catch(this.handleError);
     };
+    DataService.prototype.addAnswer = function (answer) {
+    };
+    DataService.prototype.restoreSubmittedAnswer = function () {
+    };
     DataService.prototype.buildAndRun = function (data) {
-        console.log(data);
         var httpOptions = {
             headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]({
                 'Content-Type': 'application/json',

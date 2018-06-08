@@ -37,7 +37,7 @@ export class CollaborationService {
       let x = cursor['row'];
       let y = cursor['column'];
       let changeClientId = cursor['socketId'];
-      console.log(x + ' ' + y + " " + changeClientId);
+      console.log(sessionId + ' ' +  x + ' ' + y + " " + changeClientId);
 
       if (changeClientId in this.clientsInfo) {
         session.removeMarker(this.clientsInfo[changeClientId]['marker']);
