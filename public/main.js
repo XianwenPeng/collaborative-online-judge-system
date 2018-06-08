@@ -469,6 +469,7 @@ var NavbarComponent = /** @class */ (function () {
             .valueChanges
             .debounceTime(200)
             .subscribe(function (term) { return _this.input.changeInput(term); });
+        console.log(Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6));
     };
     NavbarComponent.prototype.ngOnDestroy = function () {
         this.subscription.unsubscribe();

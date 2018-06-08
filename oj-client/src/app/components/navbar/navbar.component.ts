@@ -42,6 +42,8 @@ export class NavbarComponent implements OnInit {
                             .subscribe(
                                 term => this.input.changeInput(term)
                               );
+
+    console.log( Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6));
   }
 
   ngOnDestroy(){
