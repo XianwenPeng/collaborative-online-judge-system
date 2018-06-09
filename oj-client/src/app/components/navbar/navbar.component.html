@@ -1,5 +1,5 @@
-<div class="container">
-  <nav class="navbar navbar-default">
+<div id="navbarPane">
+  <nav class="navbar-default">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -16,7 +16,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li><a href="/">Problems</a></li>
-        <li><a routerLink="/board/{{sessionId}}" (click)="generateSessionId()">Board</a></li>
+        <li><a routerLink="/board/{{sessionId}}" (click)="generateSessionId()">CodeBoard</a></li>
         <form class="navbar-form navbar-left" (ngSubmit)="searchProblem()">
           <div class="form-group">
             <input type="text" class="form-control" placeholder="Search for problems" [formControl]="searchBox">

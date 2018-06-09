@@ -12,7 +12,7 @@ import { Observable } from 'rxjs/internal/Observable';
 })
 export class NavbarComponent implements OnInit {
 
-  title = "COJ";
+  title = "Collab Online Judge";
 
   sessionId = "";
 

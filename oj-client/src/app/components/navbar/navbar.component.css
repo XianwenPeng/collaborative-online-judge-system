@@ -1,0 +1,24 @@
+.navbar-default {
+  background-color: #30353E;
+}
+
+.navbar-default a {
+  color: white;
+}
+
+.navbar a {
+  color: #FFFFFF;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    background-color: #4c5463;
+    color: #FFFFFF;
+}
+
+.container-fluid {
+  /* height: 50px; */
+}
+
+.navbar-brand {
+  color: white;
+}

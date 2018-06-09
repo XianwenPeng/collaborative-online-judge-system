@@ -7,13 +7,13 @@
    margin-right: 10px;
  }
  header .btn {
-   margin: 0 5px;
+   margin-top: 5px;
+   margin-bottom: 5px;
  }
  footer .btn {
-   margin: 0 5px;
+   margin-top: 10px;
  }
  .editor-footer, .editor-header {
-   margin: 10px 0;
  }
  .cursor {
    /*position:absolute;*/
@@ -21,4 +21,10 @@
    z-index: 40;
    width: 2px!important
  }
+
+}
+pre {
+  margin-top:10px;
+  height: 100px;
+  width: 500px;
 }

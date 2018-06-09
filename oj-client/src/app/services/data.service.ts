@@ -54,7 +54,7 @@ export class DataService {
   }
 
   addAnswer(answer): void{
-    
+
   }
 
   restoreSubmittedAnswer(): void {
@@ -73,7 +73,9 @@ export class DataService {
       console.log(res);
       return res;
     })
-    .catch(this.handleError);
+    .catch(error => {
+      return JSON.stringify(error);
+    });
   }
 
   private handleError(error: any): Promise<any> {

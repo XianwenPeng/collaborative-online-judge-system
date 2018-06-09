@@ -13,8 +13,13 @@ declare var ace : any;
 export class EditorComponent implements OnInit {
 
   editor: any;
+  answer: string;
   problemId: string = '';
   sessionId: string = '';
+  submitted: boolean;
+
+  theme_dracula = "ace/theme/dracula";
+  theme_eclipse = "ace/theme/eclipse";
 
   public languages : string[] = ["Java", "C++", "Python"];
   language: string = "Java";
@@ -58,12 +63,13 @@ export class EditorComponent implements OnInit {
       } else {
         this.initProblemEditor();
       }
+      this.submitted = false;
     });
   }
 
   initProblemEditor(): void {
     this.editor = ace.edit("editor");
-    this.editor.setTheme("ace/theme/eclipse");
+    this.editor.setTheme(this.theme_eclipse);
     this.resetEditor();
     this.editor.$blockScrolling = Infinity;
 
@@ -75,7 +81,7 @@ export class EditorComponent implements OnInit {
 
   initEditor(): void {
     this.editor = ace.edit("editor");
-    this.editor.setTheme("ace/theme/eclipse");
+    this.editor.setTheme(this.theme_dracula);
     this.resetEditor();
     this.editor.$blockScrolling = Infinity;
 
@@ -109,6 +115,7 @@ export class EditorComponent implements OnInit {
     this.editor.session.setMode("ace/mode/" + this.languageMap[this.language]);
     this.editor.setValue(this.defaultContent[this.language]);
     this.output = '';
+    this.submitted = false;
   }
 
   submit(): void {
@@ -118,15 +125,28 @@ export class EditorComponent implements OnInit {
       lang: this.language.toLowerCase()
     };
     this.data.buildAndRun(data)
-              .then(res => this.output = res.text);
-    if (this.auth.isAuthenticated() && this.problemId !== null) {
-      let answer = {
-        data: data,
-        id: this.problemId,
-        email: this.auth.getProfile().email
-      }
-      this.data.addAnswer(answer);
-    }
+              .then(res => {
+                this.output = res.text;
+                if (this.auth.isAuthenticated()) {
+                  this.answer = this.output;
+                  this.submitted = true;
+                } else {
+                  this.answer = "You mush log in before using this feature."
+                }
+              });
+
+
+    // if (this.auth.isAuthenticated() && this.problemId !== null) {
+    //   let answer = {
+    //     data: data,
+    //     id: this.problemId,
+    //     email: this.auth.getProfile().email
+    //   }
+    //   this.data.addAnswer(answer);
+    // }
   }
 
+  hasSubmitted(): boolean {
+    return this.submitted;
+  }
 }

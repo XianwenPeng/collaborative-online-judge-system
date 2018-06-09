@@ -277,7 +277,7 @@ var AppRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "@media screen {\n #editor {\n   height: 600px;\n }\n .lang-select {\n   width: 100px;\n   margin-right: 10px;\n }\n header .btn {\n   margin: 0 5px;\n }\n footer .btn {\n   margin: 0 5px;\n }\n .editor-footer, .editor-header {\n   margin: 10px 0;\n }\n .cursor {\n   /*position:absolute;*/\n   background: rgba(0, 250, 0, 0.5);\n   z-index: 40;\n   width: 2px!important\n }\n}\n"
+module.exports = "@media screen {\n #editor {\n   height: 600px;\n }\n .lang-select {\n   width: 100px;\n   margin-right: 10px;\n }\n header .btn {\n   margin-top: 5px;\n   margin-bottom: 5px;\n }\n footer .btn {\n   margin-top: 10px;\n }\n .editor-footer, .editor-header {\n }\n .cursor {\n   /*position:absolute;*/\n   background: rgba(0, 250, 0, 0.5);\n   z-index: 40;\n   width: 2px!important\n }\n\n}\npre {\n  margin-top:10px;\n  height: 100px;\n  width: 500px;\n}\n"
 
 /***/ }),
 
@@ -288,7 +288,7 @@ module.exports = "@media screen {\n #editor {\n   height: 600px;\n }\n .lang-sel
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<section>\n  <header>\n    <select class=\"form-control pull-left lang-select\" id=\"language\"\n        name=\"language\"\n        [(ngModel)]=\"language\"\n        (change)=\"setLanguage(language)\"\n       >\n       <option *ngFor=\"let language of languages\"\n       [value]=\"language\">\n         {{language}}\n       </option>\n    </select>\n    <button type=\"button\" class=\"btn btn-default\" data-toggle=\"modal\" data-target=\"#myModal\">\n      <span class=\"glyphicon glyphicon-refresh\" aria-hidden=\"true\"></span>\n    </button>\n    <!-- Modal -->\n    <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-header\">\n\n            <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n              <span aria-hidden=\"true\">&times;</span>\n            </button>\n            <h1 class=\"modal-title\" id=\"exampleModalLabel\">Reset</h1>\n          </div>\n          <div class=\"modal-body\">\n            Are you sure? You will lose current code in the window.\n          </div>\n          <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-success\" data-dismiss=\"modal\"\n              (click)=\"resetEditor()\">Reset</button>\n            <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\">Cancel</button>\n          </div>\n        </div>\n      </div>\n    </div>\n  </header>\n\n  <div class=\"row\">\n    <div id=\"editor\">\n    </div>\n  </div>\n  <div class=\"row\">\n    {{output}}\n  </div>\n  <footer>\n    <button type=\"button\" class=\"btn btn-success pull-right\" (click)=\"submit()\">\n      Submit Solution\n    </button>\n  </footer>\n</section>\n"
+module.exports = "<div class=\"editorPane\">\n\n\n  <div class=\"row\">\n    <div id=\"editor\">\n    </div>\n  </div>\n  <header>\n    <select class=\"form-control pull-left lang-select\" id=\"language\"\n        name=\"language\" style=\"margin-top:5px;\"\n        [(ngModel)]=\"language\"\n        (change)=\"setLanguage(language)\"\n       >\n       <option *ngFor=\"let language of languages\"\n       [value]=\"language\">\n         {{language}}\n       </option>\n    </select>\n    <button type=\"button\" class=\"btn btn-default\" data-toggle=\"modal\" data-target=\"#myModal\">\n      <span class=\"glyphicon glyphicon-refresh\" aria-hidden=\"true\"></span>\n    </button>\n    <!-- Modal -->\n    <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-header\">\n\n            <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n              <span aria-hidden=\"true\">&times;</span>\n            </button>\n            <h1 class=\"modal-title\" id=\"exampleModalLabel\">Reset</h1>\n          </div>\n          <div class=\"modal-body\">\n            Are you sure? You will lose current code in the window.\n          </div>\n          <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-success\" data-dismiss=\"modal\"\n              (click)=\"resetEditor()\">Reset</button>\n            <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\">Cancel</button>\n          </div>\n        </div>\n      </div>\n    </div>\n    <button type=\"button\" class=\"btn btn-success pull-right\" (click)=\"submit()\">\n      Submit Solution\n    </button>\n  </header>\n  <pre *ngIf=\"hasSubmitted()\">{{answer}}</pre>\n</div>\n"
 
 /***/ }),
 
@@ -327,6 +327,8 @@ var EditorComponent = /** @class */ (function () {
         this.auth = auth;
         this.problemId = '';
         this.sessionId = '';
+        this.theme_dracula = "ace/theme/dracula";
+        this.theme_eclipse = "ace/theme/eclipse";
         this.languages = ["Java", "C++", "Python"];
         this.language = "Java";
         this.languageMap = {
@@ -352,11 +354,12 @@ var EditorComponent = /** @class */ (function () {
             else {
                 _this.initProblemEditor();
             }
+            _this.submitted = false;
         });
     };
     EditorComponent.prototype.initProblemEditor = function () {
         this.editor = ace.edit("editor");
-        this.editor.setTheme("ace/theme/eclipse");
+        this.editor.setTheme(this.theme_eclipse);
         this.resetEditor();
         this.editor.$blockScrolling = Infinity;
         document.getElementsByTagName('textarea')[0].focus();
@@ -366,7 +369,7 @@ var EditorComponent = /** @class */ (function () {
     EditorComponent.prototype.initEditor = function () {
         var _this = this;
         this.editor = ace.edit("editor");
-        this.editor.setTheme("ace/theme/eclipse");
+        this.editor.setTheme(this.theme_dracula);
         this.resetEditor();
         this.editor.$blockScrolling = Infinity;
         document.getElementsByTagName('textarea')[0].focus();
@@ -393,6 +396,7 @@ var EditorComponent = /** @class */ (function () {
         this.editor.session.setMode("ace/mode/" + this.languageMap[this.language]);
         this.editor.setValue(this.defaultContent[this.language]);
         this.output = '';
+        this.submitted = false;
     };
     EditorComponent.prototype.submit = function () {
         var _this = this;
@@ -402,15 +406,27 @@ var EditorComponent = /** @class */ (function () {
             lang: this.language.toLowerCase()
         };
         this.data.buildAndRun(data)
-            .then(function (res) { return _this.output = res.text; });
-        if (this.auth.isAuthenticated() && this.problemId !== null) {
-            var answer = {
-                data: data,
-                id: this.problemId,
-                email: this.auth.getProfile().email
-            };
-            this.data.addAnswer(answer);
-        }
+            .then(function (res) {
+            _this.output = res.text;
+            if (_this.auth.isAuthenticated()) {
+                _this.answer = _this.output;
+                _this.submitted = true;
+            }
+            else {
+                _this.answer = "You mush log in before using this feature.";
+            }
+        });
+        // if (this.auth.isAuthenticated() && this.problemId !== null) {
+        //   let answer = {
+        //     data: data,
+        //     id: this.problemId,
+        //     email: this.auth.getProfile().email
+        //   }
+        //   this.data.addAnswer(answer);
+        // }
+    };
+    EditorComponent.prototype.hasSubmitted = function () {
+        return this.submitted;
     };
     EditorComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -437,7 +453,7 @@ var EditorComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ""
+module.exports = ".navbar-default {\n  background-color: #30353E;\n}\n\n.navbar-default a {\n  color: white;\n}\n\n.navbar a {\n  color: #FFFFFF;\n}\n\n.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {\n    background-color: #4c5463;\n    color: #FFFFFF;\n}\n\n.container-fluid {\n  /* height: 50px; */\n}\n\n.navbar-brand {\n  color: white;\n}\n"
 
 /***/ }),
 
@@ -448,7 +464,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <nav class=\"navbar navbar-default\">\n  <div class=\"container-fluid\">\n    <!-- Brand and toggle get grouped for better mobile display -->\n    <div class=\"navbar-header\">\n      <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\" aria-expanded=\"false\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n      </button>\n      <a class=\"navbar-brand\" href=\"#\">{{title}}</a>\n    </div>\n\n    <!-- Collect the nav links, forms, and other content for toggling -->\n    <div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">\n      <ul class=\"nav navbar-nav\">\n        <li><a href=\"/\">Problems</a></li>\n        <li><a routerLink=\"/board/{{sessionId}}\" (click)=\"generateSessionId()\">Board</a></li>\n        <form class=\"navbar-form navbar-left\" (ngSubmit)=\"searchProblem()\">\n          <div class=\"form-group\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Search for problems\" [formControl]=\"searchBox\">\n          </div>\n        </form>\n      </ul>\n      <ul class=\"nav navbar-nav navbar-right\">\n        <li >\n          <form class=\"navbar-form\">\n            <button type=\"button\" class=\"btn btn-primary\" *ngIf=\"!auth.isAuthenticated()\"\n              (click)=\"login()\"\n            >Sign in</button>\n          </form>\n        </li>\n        <li class=\"dropdown\" *ngIf=\"auth.isAuthenticated()\">\n          <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">{{username}} <span class=\"caret\"></span></a>\n          <ul class=\"dropdown-menu dropdown-menu-right\">\n            <li><a routerLink=\"/profile\">My profile</a></li>\n            <li><a href=\"#\">My favorites</a></li>\n            <li><a href=\"#\">Something else here</a></li>\n            <li role=\"separator\" class=\"divider\"></li>\n            <li><a (click)=\"logout()\">Logout</a></li>\n          </ul>\n        </li>\n      </ul>\n    </div><!-- /.navbar-collapse -->\n  </div><!-- /.container-fluid -->\n</nav>\n</div>\n"
+module.exports = "<div id=\"navbarPane\">\n  <nav class=\"navbar-default\">\n  <div class=\"container-fluid\">\n    <!-- Brand and toggle get grouped for better mobile display -->\n    <div class=\"navbar-header\">\n      <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\" aria-expanded=\"false\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n      </button>\n      <a class=\"navbar-brand\" href=\"#\">{{title}}</a>\n    </div>\n\n    <!-- Collect the nav links, forms, and other content for toggling -->\n    <div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">\n      <ul class=\"nav navbar-nav\">\n        <li><a href=\"/\">Problems</a></li>\n        <li><a routerLink=\"/board/{{sessionId}}\" (click)=\"generateSessionId()\">CodeBoard</a></li>\n        <form class=\"navbar-form navbar-left\" (ngSubmit)=\"searchProblem()\">\n          <div class=\"form-group\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Search for problems\" [formControl]=\"searchBox\">\n          </div>\n        </form>\n      </ul>\n      <ul class=\"nav navbar-nav navbar-right\">\n        <li >\n          <form class=\"navbar-form\">\n            <button type=\"button\" class=\"btn btn-primary\" *ngIf=\"!auth.isAuthenticated()\"\n              (click)=\"login()\"\n            >Sign in</button>\n          </form>\n        </li>\n        <li class=\"dropdown\" *ngIf=\"auth.isAuthenticated()\">\n          <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">{{username}} <span class=\"caret\"></span></a>\n          <ul class=\"dropdown-menu dropdown-menu-right\">\n            <li><a routerLink=\"/profile\">My profile</a></li>\n            <li><a href=\"#\">My favorites</a></li>\n            <li><a href=\"#\">Something else here</a></li>\n            <li role=\"separator\" class=\"divider\"></li>\n            <li><a (click)=\"logout()\">Logout</a></li>\n          </ul>\n        </li>\n      </ul>\n    </div><!-- /.navbar-collapse -->\n  </div><!-- /.container-fluid -->\n</nav>\n</div>\n"
 
 /***/ }),
 
@@ -492,7 +508,7 @@ var NavbarComponent = /** @class */ (function () {
         this.auth = auth;
         this.input = input;
         this.router = router;
-        this.title = "COJ";
+        this.title = "Collab Online Judge";
         this.sessionId = "";
         this.searchBox = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"]();
         this.subject = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
@@ -649,7 +665,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\" *ngIf=\"problem\">\n  <div class=\"col-xs-12 col-md-4\">\n    <div>\n      <h2>\n        {{problem.id}}. {{problem.title}}\n      </h2>\n      <p>\n        {{problem.desc}}\n      </p>\n      <br/>\n    </div>\n  </div>\n  <div class=\"hidden-xs col-sm-12 col-md-8\">\n      <app-editor></app-editor>\n  </div>\n</div>\n"
+module.exports = "<div class=\"container\" *ngIf=\"problem\">\n  <div class=\"col-xs-12 col-md-4\">\n    <div>\n      <h2>\n        {{problem.id}}. {{problem.title}}\n      </h2>\n      <p>\n        {{problem.desc}}\n      </p>\n      <br/>\n    </div>\n  </div>\n  <div class=\"hidden-xs col-sm-12 col-md-8\" style=\"margin-top: 20px;\">\n      <app-editor></app-editor>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -885,7 +901,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <div class=\"col-sm-16 col-md-12\">\n      <app-editor></app-editor>\n  </div>\n  <!-- <div class=\"col-xs-12 col-md-4\">\n    <div>\n      <p>\n        Code Board\n      </p>\n      <br/>\n    </div>\n  </div> -->\n</div>\n"
+module.exports = "<div >\n  <div class=\"col-sm-16 col-md-12\" style=\"background-color:#383b4c;\">\n      <app-editor></app-editor>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -1340,7 +1356,9 @@ var DataService = /** @class */ (function () {
             console.log(res);
             return res;
         })
-            .catch(this.handleError);
+            .catch(function (error) {
+            return JSON.stringify(error);
+        });
     };
     DataService.prototype.handleError = function (error) {
         console.error('An error happened', error);
