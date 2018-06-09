@@ -129,10 +129,10 @@ export class EditorComponent implements OnInit {
                 this.output = res.text;
                 if (this.auth.isAuthenticated()) {
                   this.answer = this.output;
-                  this.submitted = true;
                 } else {
                   this.answer = "You mush log in before using this feature."
                 }
+                this.submitted = true;
               });
 
 

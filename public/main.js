@@ -410,11 +410,11 @@ var EditorComponent = /** @class */ (function () {
             _this.output = res.text;
             if (_this.auth.isAuthenticated()) {
                 _this.answer = _this.output;
-                _this.submitted = true;
             }
             else {
                 _this.answer = "You mush log in before using this feature.";
             }
+            _this.submitted = true;
         });
         // if (this.auth.isAuthenticated() && this.problemId !== null) {
         //   let answer = {
