@@ -63,7 +63,7 @@ export class EditorComponent implements OnInit {
       } else {
         this.initProblemEditor();
       }
-      this.submitted = false;
+      this.submitted = true;
     });
   }
 
@@ -115,7 +115,6 @@ export class EditorComponent implements OnInit {
     this.editor.session.setMode("ace/mode/" + this.languageMap[this.language]);
     this.editor.setValue(this.defaultContent[this.language]);
     this.output = '';
-    this.submitted = false;
   }
 
   submit(): void {
@@ -127,12 +126,8 @@ export class EditorComponent implements OnInit {
     this.data.buildAndRun(data)
               .then(res => {
                 this.output = res.text;
-                if (this.auth.isAuthenticated()) {
-                  this.answer = this.output;
-                } else {
-                  this.answer = "You mush log in before using this feature."
-                }
-                this.submitted = true;
+                this.answer = this.output;
+                // this.submitted = true;
               });
 
 

@@ -354,7 +354,7 @@ var EditorComponent = /** @class */ (function () {
             else {
                 _this.initProblemEditor();
             }
-            _this.submitted = false;
+            _this.submitted = true;
         });
     };
     EditorComponent.prototype.initProblemEditor = function () {
@@ -396,7 +396,6 @@ var EditorComponent = /** @class */ (function () {
         this.editor.session.setMode("ace/mode/" + this.languageMap[this.language]);
         this.editor.setValue(this.defaultContent[this.language]);
         this.output = '';
-        this.submitted = false;
     };
     EditorComponent.prototype.submit = function () {
         var _this = this;
@@ -408,13 +407,8 @@ var EditorComponent = /** @class */ (function () {
         this.data.buildAndRun(data)
             .then(function (res) {
             _this.output = res.text;
-            if (_this.auth.isAuthenticated()) {
-                _this.answer = _this.output;
-            }
-            else {
-                _this.answer = "You mush log in before using this feature.";
-            }
-            _this.submitted = true;
+            _this.answer = _this.output;
+            // this.submitted = true;
         });
         // if (this.auth.isAuthenticated() && this.problemId !== null) {
         //   let answer = {
