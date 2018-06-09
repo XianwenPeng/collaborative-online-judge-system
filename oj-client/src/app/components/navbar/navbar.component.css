@@ -22,3 +22,11 @@
 .navbar-brand {
   color: white;
 }
+
+.dropdown a {
+  color: black;
+}
+
+#username {
+  color: white;
+}
