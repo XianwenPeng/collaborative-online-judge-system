@@ -20,7 +20,7 @@ export class AuthService {
     domain: 'co-oj.auth0.com',
     responseType: 'token id_token',
     audience: 'https://co-oj.auth0.com/userinfo',
-    redirectUri: 'http://18.216.188.225:3000/callback',
+    redirectUri: 'http://18.217.220.41:3000/callback',
     // redirectUri: 'http://localhost:3000/callback',
     scope: 'openid profile email roles'
   });
