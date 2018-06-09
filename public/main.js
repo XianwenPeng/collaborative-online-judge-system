@@ -277,7 +277,7 @@ var AppRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "@media screen {\n #editor {\n   height: 600px;\n }\n .lang-select {\n   width: 100px;\n   margin-right: 10px;\n }\n header .btn {\n   margin-top: 5px;\n   margin-bottom: 5px;\n }\n footer .btn {\n   margin-top: 10px;\n }\n .editor-footer, .editor-header {\n }\n .cursor {\n   /*position:absolute;*/\n   background: rgba(0, 250, 0, 0.5);\n   z-index: 40;\n   width: 2px!important\n }\n\n}\npre {\n  margin-top:10px;\n  height: 100px;\n  width: 500px;\n}\n"
+module.exports = "@media screen {\n #editor {\n   height: 800px;\n }\n .lang-select {\n   width: 100px;\n   margin-right: 10px;\n }\n header .btn {\n   margin-top: 5px;\n   margin-bottom: 5px;\n }\n footer .btn {\n   margin-top: 10px;\n }\n .editor-footer, .editor-header {\n }\n .cursor {\n   /*position:absolute;*/\n   background: rgba(0, 250, 0, 0.5);\n   z-index: 40;\n   width: 2px!important\n }\n\n}\npre {\n  margin-top:10px;\n  height: 100px;\n  width: 500px;\n}\n"
 
 /***/ }),
 
