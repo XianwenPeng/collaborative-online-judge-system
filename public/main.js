@@ -41,7 +41,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-navbar></app-navbar>\n<router-outlet></router-outlet>\n<!--<app-problem-list></app-problem-list>-->\n"
+module.exports = "<app-navbar></app-navbar>\n<router-outlet></router-outlet>\n<app-footbar></app-footbar>\n\n<!--<app-problem-list></app-problem-list>-->\n"
 
 /***/ }),
 
@@ -121,12 +121,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_editor_editor_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/editor/editor.component */ "./src/app/components/editor/editor.component.ts");
 /* harmony import */ var _pipes_search_pipe__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./pipes/search.pipe */ "./src/app/pipes/search.pipe.ts");
 /* harmony import */ var _components_session_detail_session_detail_component__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/session-detail/session-detail.component */ "./src/app/components/session-detail/session-detail.component.ts");
+/* harmony import */ var _components_footbar_footbar_component__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/footbar/footbar.component */ "./src/app/components/footbar/footbar.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -161,7 +163,8 @@ var AppModule = /** @class */ (function () {
                 _components_profile_profile_component__WEBPACK_IMPORTED_MODULE_15__["ProfileComponent"],
                 _components_editor_editor_component__WEBPACK_IMPORTED_MODULE_16__["EditorComponent"],
                 _pipes_search_pipe__WEBPACK_IMPORTED_MODULE_17__["SearchPipe"],
-                _components_session_detail_session_detail_component__WEBPACK_IMPORTED_MODULE_18__["SessionDetailComponent"]
+                _components_session_detail_session_detail_component__WEBPACK_IMPORTED_MODULE_18__["SessionDetailComponent"],
+                _components_footbar_footbar_component__WEBPACK_IMPORTED_MODULE_19__["FootbarComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
@@ -288,7 +291,7 @@ module.exports = "@media screen {\n #editor {\n   height: 800px;\n }\n .lang-sel
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"editorPane\">\n\n\n  <div class=\"row\">\n    <div id=\"editor\">\n    </div>\n  </div>\n  <header>\n    <select class=\"form-control pull-left lang-select\" id=\"language\"\n        name=\"language\" style=\"margin-top:5px;\"\n        [(ngModel)]=\"language\"\n        (change)=\"setLanguage(language)\"\n       >\n       <option *ngFor=\"let language of languages\"\n       [value]=\"language\">\n         {{language}}\n       </option>\n    </select>\n    <button type=\"button\" class=\"btn btn-default\" data-toggle=\"modal\" data-target=\"#myModal\">\n      <span class=\"glyphicon glyphicon-refresh\" aria-hidden=\"true\"></span>\n    </button>\n    <!-- Modal -->\n    <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-header\">\n\n            <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n              <span aria-hidden=\"true\">&times;</span>\n            </button>\n            <h1 class=\"modal-title\" id=\"exampleModalLabel\">Reset</h1>\n          </div>\n          <div class=\"modal-body\">\n            Are you sure? You will lose current code in the window.\n          </div>\n          <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-success\" data-dismiss=\"modal\"\n              (click)=\"resetEditor()\">Reset</button>\n            <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\">Cancel</button>\n          </div>\n        </div>\n      </div>\n    </div>\n    <button type=\"button\" class=\"btn btn-success pull-right\" (click)=\"submit()\">\n      Submit Solution\n    </button>\n  </header>\n  <pre *ngIf=\"hasSubmitted()\">{{answer}}</pre>\n</div>\n"
+module.exports = "<div class=\"editorPane\">\n\n\n  <div class=\"row\">\n    <div id=\"editor\">\n    </div>\n  </div>\n  <header>\n    <select class=\"form-control pull-left lang-select\" id=\"language\"\n        name=\"language\" style=\"margin-top:5px;\"\n        [(ngModel)]=\"language\"\n        (change)=\"setLanguage(language)\"\n       >\n       <option *ngFor=\"let language of languages\"\n       [value]=\"language\">\n         {{language}}\n       </option>\n    </select>\n    <button type=\"button\" class=\"btn btn-default\" data-toggle=\"modal\" data-target=\"#myModal\">\n      <span class=\"glyphicon glyphicon-refresh\" aria-hidden=\"true\"></span>\n    </button>\n    <!-- Modal -->\n    <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-header\">\n\n            <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n              <span aria-hidden=\"true\">&times;</span>\n            </button>\n            <h1 class=\"modal-title\" id=\"exampleModalLabel\">Reset</h1>\n          </div>\n          <div class=\"modal-body\">\n            Are you sure? You will lose current code in the window.\n          </div>\n          <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-success\" data-dismiss=\"modal\"\n              (click)=\"resetEditor()\">Reset</button>\n            <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\">Cancel</button>\n          </div>\n        </div>\n      </div>\n    </div>\n    <button type=\"button\" class=\"btn btn-success pull-right\" (click)=\"submit()\">\n      Submit Solution\n    </button>\n    <pre *ngIf=\"hasSubmitted()\">{{answer}}</pre>\n  </header>\n\n</div>\n"
 
 /***/ }),
 
@@ -440,6 +443,69 @@ var EditorComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/components/footbar/footbar.component.css":
+/*!**********************************************************!*\
+  !*** ./src/app/components/footbar/footbar.component.css ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ".social:hover {\n     -webkit-transform: scale(1.1);\n     -moz-transform: scale(1.1);\n     -o-transform: scale(1.1);\n }\n .social {\n     -webkit-transform: scale(0.8);\n     /* Browser Variations: */\n\n     -moz-transform: scale(0.8);\n     -o-transform: scale(0.8);\n     -webkit-transition-duration: 0.5s;\n     -moz-transition-duration: 0.5s;\n     -o-transition-duration: 0.5s;\n }\n #footer {\n}\n /*\n    Multicoloured Hover Variations\n*/\n #social-fb:hover {\n     color: #3B5998;\n }\n #social-li:hover {\n     color: #0077B5;\n }\n #social-gh:hover {\n     color: #24292E;\n }\n #social-gp:hover {\n     color: #30353E;\n }\n #social-em:hover {\n     color: #f39c12;\n }\n"
+
+/***/ }),
+
+/***/ "./src/app/components/footbar/footbar.component.html":
+/*!***********************************************************!*\
+  !*** ./src/app/components/footbar/footbar.component.html ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<link href=\"//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css\" rel=\"stylesheet\" id=\"bootstrap-css\">\n<script src=\"//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js\"></script>\n<script src=\"//code.jquery.com/jquery-1.11.1.min.js\"></script>\n<!------ Include the above in your HEAD tag ---------->\n\n<!-- Social Footer, Colour Matching Icons -->\n<!-- Include Font Awesome Stylesheet in Header -->\n<link href=\"//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css\" rel=\"stylesheet\">\n<link href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==\" crossorigin=\"anonymous\">\n<!-- // -->\n<div id=\"footer\">\n<div class=\"container\" >\n        <div class=\"text-center center-block\">\n            <p class=\"txt-railway\">- Xianwen Peng - fallenpxw@gmail.com -</p>\n              <a href=\"http://www.linkedin.com/in/xianwen-peng\" ><i id=\"social-li\" class=\"fa fa-linkedin-square fa-3x social\" aria-hidden=\"true\"></i></a>\n              <a href=\"https://www.facebook.com/fallenpeng\"><i id=\"social-fb\" class=\"fa fa-facebook-square fa-3x social\"></i></a>\n\t            <a href=\"https://github.com/XianwenPeng\"><i id=\"social-gh\" class=\"fa fa-github-square fa-3x social\"></i></a>\n\t            <a href=\"mailto:fallenpxw@gmail.com\"><i id=\"social-em\" class=\"fa fa-envelope-square fa-3x social\"></i></a>\n              <a href=\"https://tinyurl.com/xwpeng\"><i id=\"social-gp\" class=\"fa fa-plus-square fa-3x social\"></i></a>\n</div>\n</div>\n\n\n<!-- Social Footer, Single Coloured -->\n<!-- Include Font Awesome Stylesheet in Header -->\n<link href=\"//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css\" rel=\"stylesheet\">\n"
+
+/***/ }),
+
+/***/ "./src/app/components/footbar/footbar.component.ts":
+/*!*********************************************************!*\
+  !*** ./src/app/components/footbar/footbar.component.ts ***!
+  \*********************************************************/
+/*! exports provided: FootbarComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FootbarComponent", function() { return FootbarComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var FootbarComponent = /** @class */ (function () {
+    function FootbarComponent() {
+    }
+    FootbarComponent.prototype.ngOnInit = function () {
+    };
+    FootbarComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-footbar',
+            template: __webpack_require__(/*! ./footbar.component.html */ "./src/app/components/footbar/footbar.component.html"),
+            styles: [__webpack_require__(/*! ./footbar.component.css */ "./src/app/components/footbar/footbar.component.css")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], FootbarComponent);
+    return FootbarComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/components/navbar/navbar.component.css":
 /*!********************************************************!*\
   !*** ./src/app/components/navbar/navbar.component.css ***!
@@ -516,6 +582,7 @@ var NavbarComponent = /** @class */ (function () {
             .valueChanges
             .debounceTime(200)
             .subscribe(function (term) { return _this.input.changeInput(term); });
+        this.getUserName();
     };
     NavbarComponent.prototype.ngOnDestroy = function () {
         this.subscription.unsubscribe();
@@ -524,8 +591,7 @@ var NavbarComponent = /** @class */ (function () {
         this.router.navigate(['/problems']);
     };
     NavbarComponent.prototype.getUserName = function () {
-        this.subscriptionName = this.auth.getUserName()
-            .subscribe(function (name) { return console.log(name); });
+        this.username = this.auth.nickname;
     };
     NavbarComponent.prototype.generateSessionId = function () {
         this.sessionId = Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6);
@@ -724,7 +790,7 @@ var ProblemDetailComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".difficulty {\n  min-width: 65px;\n  margin-right: 10px;\n}\n\n.label.difficulty {\n  padding-top: 0.6em;\n  color: #fbfdfa;\n  font-size: 12px;\n}\n\n.title {\n  font-size: 1.2em;\n}\n\n.diff-easy {\n  background-color: #5CB85C;\n}\n\n.diff-medium {\n  background-color: #F0AD4E;\n}\n\n.diff-hard {\n  background-color: #D9534F;\n}\n"
+module.exports = ".difficulty {\n  min-width: 65px;\n  margin-right: 10px;\n}\n\n.label.difficulty {\n  padding-top: 0.6em;\n  color: #fbfdfa;\n  font-size: 12px;\n}\n\n.title {\n  font-size: 1.2em;\n}\n\n.diff-easy {\n  background-color: #5CB85C;\n}\n\n.diff-medium {\n  background-color: #F0AD4E;\n}\n\n.diff-hard {\n  background-color: #D9534F;\n}\n\n.hr.style1{\n\tborder-top: 1px solid #8c8b8b;\n}\n"
 
 /***/ }),
 
@@ -735,7 +801,7 @@ module.exports = ".difficulty {\n  min-width: 65px;\n  margin-right: 10px;\n}\n\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class = \"container\" style=\"margin-top: 20px;\">\n  <app-new-problem></app-new-problem>\n  <div class = \"list-group\" style=\"margin-top: 20px;\">\n    <a class = \"list-group-item\" *ngFor=\"let problem of problems | search: searchTerm\" routerLink=\"/problems/{{problem.id}}\">\n      <span class = \"{{'pull-left badge label difficulty diff-' + problem.difficulty.toLocaleLowerCase()}}\">{{problem.difficulty}}</span>\n      <strong class = \"title\">{{problem.id}}. {{problem.title}}</strong>\n    </a>\n  </div>\n</div>\n"
+module.exports = "<div class = \"container\" style=\"margin-top: 20px;\">\n  <app-new-problem></app-new-problem>\n  <div style=\"margin-top: 20px;\">\n    <label style=\"font-size: 20px;\">Create a Collaborative Code Board</label>\n    <button type=\"submit\" class=\"btn btn-primary\"\n    routerLink=\"/board/{{sessionId}}\" (click)=\"generateSessionId()\"\n    style=\"margin-left: 50px;\">\n      Try Code Board</button>\n  </div>\n  <hr class=\"style1\"/>\n\n  <div class = \"list-group\" style=\"margin-top: 20px;\">\n    <label style=\"font-size: 20px; margin-bottom: 10px;\">Problems</label>\n    <a class = \"list-group-item\" *ngFor=\"let problem of problems | search: searchTerm\" routerLink=\"/problems/{{problem.id}}\">\n      <span class = \"{{'pull-left badge label difficulty diff-' + problem.difficulty.toLocaleLowerCase()}}\">{{problem.difficulty}}</span>\n      <strong class = \"title\">{{problem.id}}. {{problem.title}}</strong>\n    </a>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -782,6 +848,11 @@ var ProblemListComponent = /** @class */ (function () {
         var _this = this;
         this.subscriptionInput = this.input.getInput()
             .subscribe(function (inputTerm) { return _this.searchTerm = inputTerm; });
+    };
+    ProblemListComponent.prototype.generateSessionId = function () {
+        var sessionId = Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6);
+        window.open("/board/" + sessionId);
+        // this.router.navigate([`/board/${this.sessionId}`]);
     };
     ProblemListComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -1100,7 +1171,8 @@ var AuthService = /** @class */ (function () {
             if (authResult && authResult.accessToken && authResult.idToken) {
                 _this.auth0.client.userInfo(authResult.accessToken, function (err, user) {
                     localStorage.setItem('profile', JSON.stringify(user));
-                });
+                    this.nickname = user.nickname;
+                }).bind(_this);
                 window.location.hash = '';
                 _this.setSession(authResult);
             }

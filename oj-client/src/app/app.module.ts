@@ -22,6 +22,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { SearchPipe } from './pipes/search.pipe';
 import { SessionDetailComponent } from './components/session-detail/session-detail.component';
+import { FootbarComponent } from './components/footbar/footbar.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { SessionDetailComponent } from './components/session-detail/session-deta
     ProfileComponent,
     EditorComponent,
     SearchPipe,
-    SessionDetailComponent
+    SessionDetailComponent,
+    FootbarComponent
   ],
   imports: [
     BrowserModule,

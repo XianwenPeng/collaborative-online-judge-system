@@ -44,6 +44,7 @@ export class NavbarComponent implements OnInit {
                             .subscribe(
                                 term => this.input.changeInput(term)
                               );
+    this.getUserName();
   }
 
   ngOnDestroy(){
@@ -55,10 +56,7 @@ export class NavbarComponent implements OnInit {
   }
 
   getUserName(): void {
-    this.subscriptionName = this.auth.getUserName()
-                            .subscribe(
-                              name => console.log(name)
-                            );
+    this.username = this.auth.nickname;
   }
 
   generateSessionId() {

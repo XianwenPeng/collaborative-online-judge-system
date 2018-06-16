@@ -34,4 +34,10 @@ export class ProblemListComponent implements OnInit {
                                           inputTerm => this.searchTerm = inputTerm
                                         );
   }
+
+  generateSessionId() {
+    var sessionId = Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6);
+    window.open(`/board/${sessionId}`);
+    // this.router.navigate([`/board/${this.sessionId}`]);
+  }
 }

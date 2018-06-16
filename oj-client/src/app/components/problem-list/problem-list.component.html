@@ -1,6 +1,16 @@
 <div class = "container" style="margin-top: 20px;">
   <app-new-problem></app-new-problem>
+  <div style="margin-top: 20px;">
+    <label style="font-size: 20px;">Create a Collaborative Code Board</label>
+    <button type="submit" class="btn btn-primary"
+    routerLink="/board/{{sessionId}}" (click)="generateSessionId()"
+    style="margin-left: 50px;">
+      Try Code Board</button>
+  </div>
+  <hr class="style1"/>
+
   <div class = "list-group" style="margin-top: 20px;">
+    <label style="font-size: 20px; margin-bottom: 10px;">Problems</label>
     <a class = "list-group-item" *ngFor="let problem of problems | search: searchTerm" routerLink="/problems/{{problem.id}}">
       <span class = "{{'pull-left badge label difficulty diff-' + problem.difficulty.toLocaleLowerCase()}}">{{problem.difficulty}}</span>
       <strong class = "title">{{problem.id}}. {{problem.title}}</strong>
