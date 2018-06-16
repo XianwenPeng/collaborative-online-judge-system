@@ -582,7 +582,6 @@ var NavbarComponent = /** @class */ (function () {
             .valueChanges
             .debounceTime(200)
             .subscribe(function (term) { return _this.input.changeInput(term); });
-        this.getUserName();
     };
     NavbarComponent.prototype.ngOnDestroy = function () {
         this.subscription.unsubscribe();
@@ -591,7 +590,8 @@ var NavbarComponent = /** @class */ (function () {
         this.router.navigate(['/problems']);
     };
     NavbarComponent.prototype.getUserName = function () {
-        this.username = this.auth.nickname;
+        this.subscriptionName = this.auth.getUserName()
+            .subscribe(function (name) { return console.log(name); });
     };
     NavbarComponent.prototype.generateSessionId = function () {
         this.sessionId = Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6);
@@ -1171,8 +1171,7 @@ var AuthService = /** @class */ (function () {
             if (authResult && authResult.accessToken && authResult.idToken) {
                 _this.auth0.client.userInfo(authResult.accessToken, function (err, user) {
                     localStorage.setItem('profile', JSON.stringify(user));
-                    this.nickname = user.nickname;
-                }).bind(_this);
+                });
                 window.location.hash = '';
                 _this.setSession(authResult);
             }

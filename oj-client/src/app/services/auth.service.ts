@@ -31,8 +31,6 @@ export class AuthService {
 
   nameSubject: Subject<string>;
 
-  nickname: string;
-
   constructor(public router: Router,
               private http: HttpClient) { }
 
@@ -48,8 +46,7 @@ export class AuthService {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.auth0.client.userInfo(authResult.accessToken, function(err, user) {
           localStorage.setItem('profile', JSON.stringify(user));
-          this.nickname = user.nickname;
-        }).bind(this);
+        });
         window.location.hash = '';
         this.setSession(authResult);
       } else if (error) {
